@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> {{name}} </h1>
+  <form>
+    <p> Quote: <b> {{quote}} </b> </p>
+
+    {% if winner == "true" %}
+        Season Winner
+    {% endif %}
+
+    {% if congeniality == "true" %}
+        Miss Congeniality
+    {% endif %}
+
+{% endblock %}

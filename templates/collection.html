@@ -1,0 +1,17 @@
+<h1>{{ collection.name }}</h1>
+{% extends 'base.html' %}
+
+{% block navigation %}
+ {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+{% for queen in queens %}
+    <li><strong>{{ queen.queen_name }}</strong></li>
+
+
+{% endfor %}
+
+
+{% endblock %}

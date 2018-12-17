@@ -1,0 +1,18 @@
+<h1>Create a new Queen collection</h1>
+{% extends 'base.html' %}
+
+
+{% block navigation %}
+ {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="POST">
+	{{ form.hidden_tag() }}
+	{{ form.collection_name.label }} {{ form.collection_name() }}
+	{{ form.queen_picks.label }} {{ form.queen_picks() }}
+	{{ form.submit.label }}{{ form.submit() }}
+</form>
+
+{% endblock %}

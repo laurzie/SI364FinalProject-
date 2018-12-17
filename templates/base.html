@@ -1,0 +1,21 @@
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('logout') }}">Sign Out {{current_user.username}}</a>
+{% else %}
+<a href="{{ url_for('login') }}">Sign In</a>
+{% endif %}
+<br>
+<br>
+{% block content %}
+{% endblock %}
+
+
+<p>------------</p>
+<h3>Navigation</h3>
+<ul>
+  <li><a href="{{ url_for('index')}}">Go to Queen input form.</a></li>
+  <li><a href="{{ url_for('seasons')}}">Go to Seasons input form.</a></li>
+  <li><a href="{{ url_for('all_queens')}}"> See all Queens Entered </a></li>
+  <li><a href="{{ url_for('create_collection') }}">Create a personal Queen collection</a></li>
+  <li><a href="{{ url_for('collections') }}">See your collections</a></li>
+  <li><a href="{{ url_for('episode_number') }}">Enter an episode number</a></li>
+</ul>

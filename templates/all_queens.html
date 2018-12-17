@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+{% for queen in queens %}
+  <li>{{ queen.queen_name }} </li>
+{% endfor %}
+</ul>
+
+{% if not queens%}
+    There are no queens to show.
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Login</h1>
+
+<div>
+{% for message in get_flashed_messages() %}
+{{ message }}
+{% endfor %}
+</div>
+
+
+<form method="POST">
+	{{ form.hidden_tag() }}
+  {{ form.username.label }} {{ form.username() }}
+	{{ form.password.label }} {{ form.password() }}
+	{{ form.submit() }}
+</form>
+
+
+<p> <b> If you are a New user: </b> </p>
+<a href="{{ url_for('register') }}">Click here to register</a>
+
+{% endblock %}
