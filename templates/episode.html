@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-<form method="POST">
+<form method='GET' action="/title">
   <h1>Enter the number of the episode you want to get the title: <h1>
   {{ form.hidden_tag() }}
 	<h2>{{ form.episode_number.label }}{{ form.episode_number()}}</h2>

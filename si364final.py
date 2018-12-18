@@ -146,6 +146,17 @@ def get_list_of_queens():
         list_of_queens.append(x["name"])
     return list_of_queens
 
+def get_number_of_episodes(form_number):
+    form_number = form_number
+    if form_number <= 4:
+        season_id_number = form_number
+    elif form_number >= 5 and form_number < 9:
+        season_id_number = form_number + 1
+    elif form_number >= 9 and form_number < 13:
+        season_id_number = form_number + 2
+    episodes= Episodes.query.filter_by(season_id = season_id_number).all()
+    return episodes
+
 def get_season_api_info(season_id_number):
     baseurl="http://www.nokeynoshade.party/api/seasons/{}".format(season_id_number)
     response = requests.get(baseurl)
@@ -172,8 +183,6 @@ def get_or_create_episode(season_id_number):
     response = requests.get(baseurl)
     text = response.text
     python_obj = json.loads(text)
-    print("***************\n\n\n")
-    print(python_obj)
     for item in python_obj:
         episode_title = item["title"]
         episode_number = item["episodeInSeason"]
@@ -181,6 +190,7 @@ def get_or_create_episode(season_id_number):
         db.session.add(episodes)
         db.session.commit()
     return episodes
+
 
 
 def get_queen_api_info(queen_name):
@@ -297,7 +307,7 @@ class DeleteButtonForm(FlaskForm):
     submit = SubmitField('Delete')
 
 class EpisodeInput(FlaskForm):
-    episode_number = IntegerField("Please enter the number of an episode you want the title on:", validators=[Required()])
+    episode_number = IntegerField("Please enter the number of an episode (1- 100) you want the title on:", validators=[Required()])
     submit = SubmitField()
 
 #######################
@@ -343,7 +353,6 @@ def logout():
 @app.route('/seasons', methods=['GET', 'POST'])
 def seasons():
     form = SeasonForm()
-    print("\nSTARTING SEASONS\n")
     if form.validate_on_submit():
         form_number= form.season_number.data
         if form_number <= 4:
@@ -353,7 +362,6 @@ def seasons():
         elif form_number >= 9 and form_number < 13:
             season_id_number = form_number + 2
         get_or_create_season(form_number = form_number, season_id_number = season_id_number)
-        print("\nENDING SEASONS\n")
         return redirect(url_for('get_all_episodes', season_number = form_number))
 
     errors = [v for v in form.errors.values()]
@@ -399,30 +407,23 @@ def all_queens():
     queen= Queens.query.all()
     return render_template('all_queens.html', queens = queen)
 
-@app.route('/episodes')
+@app.route('/episodes', methods=["GET","POST"])
 def episode_number():
-    return """<form action="http://localhost:5000/title" method='GET'>
-    <h1> Get Episode Title </h1>
-    Enter in a Episode Number <input type="integer" name="number">
-    <input type="submit" value="Submit">
-    </form>
-    """
+    form = EpisodeInput()
+    return render_template('episode.html', form = form)
+
 
 @app.route('/title',methods=["GET"])
 def get_title():
     if request.method == "GET":
-        number = request.args.get('number','')
-        print("+++++")
-        print(number)
+        number = request.args.get('episode_number','')
         new_number = int(number) + 7
         baseurl="http://www.nokeynoshade.party/api/episodes/{}".format(new_number)
         response = requests.get(baseurl)
         text = response.text
         python_obj = json.loads(text)
         title = python_obj["title"]
-        return "There title of episode {} is {}".format(number, title)
-        # Challenge: how would you change this to say "occurrence" in the case there's only 1 'e'?
-    return "Nothing was submitted yet... <a href='http://localhost:5000/episodes'>Go submit something</a>"
+        return render_template('title_episode.html', episode = number, title = title)
 
 
 
